@@ -34,7 +34,15 @@ APIR_FERRETERIA/
 
 🧬 Endpoints del Servidor (Contrato de la API)
 La API implementa un esquema CRUD completo junto con un sistema inteligente de monitoreo a través de los siguientes métodos HTTP estandarizados:
-MétodoEndpointDescripciónValidación de Entrada / Reglas de NegocioGET/Estado del servicio (Health Check)Ninguna. Retorna estado del core.GET/ironObtiene la lista completa de herramientasNinguna. Retorna lista mapeada en diccionarios.GET/iron/alertsMódulo Inteligente: Filtra stock críticoDevuelve productos donde cantidad_actual <= stock_minimo_alerta.GET/iron/{id}Busca un producto específico por su IDParámetro de ruta (int) con filtro de existencia 404.POST/ironRegistra un nuevo producto en el inventarioValidación estricta vía IronSchema (JSON body).PUT/ironActualiza costos, precios y stockParámetros de consulta (query params) con validación de tipos y filtro 404.DELETE/iron/{iron_id}Elimina un producto permanentementeParámetro de ruta (int) con filtro de existencia 404.
+| Método | Endpoint | Descripción | Validación de Entrada / Reglas de Negocio |
+|---------|----------|-------------|-------------------------------------------|
+| GET | `/` | Estado del servicio (Health Check) | Ninguna. Retorna estado del core. |
+| GET | `/iron` | Obtiene la lista completa de herramientas | Ninguna. Retorna lista mapeada en diccionarios. |
+| GET | `/iron/alerts` | Módulo Inteligente: Filtra stock crítico | Devuelve productos donde `cantidad_actual <= stock_minimo_alerta`. |
+| GET | `/iron/{id}` | Busca un producto específico por su ID | Parámetro de ruta (`int`) con filtro de existencia `404`. |
+| POST | `/iron` | Registra un nuevo producto en el inventario | Validación estricta vía `IronSchema` (JSON Body). |
+| PUT | `/iron` | Actualiza costos, precios y stock | Parámetros de consulta (*query params*) con validación de tipos y filtro `404`. |
+| DELETE | `/iron/{iron_id}` | Elimina un producto permanentemente | Parámetro de ruta (`int`) con filtro de existencia `404`. |
 
 git clone [https://github.com/TU_USUARIO/apir_ferreteria.git](https://github.com/TU_USUARIO/apir_ferreteria.git)
 cd apir_ferreteria
