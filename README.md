@@ -31,6 +31,7 @@ APIR_FERRETERIA/
 ├── .gitignore                # Filtro de archivos para el control de versiones
 ├── main.py                   # Cerebro de la API (Rutas y Endpoints de FastAPI)
 └── requirements.txt          # Lista de dependencias del proyecto
+```
 
 🧬 Endpoints del Servidor (Contrato de la API)
 La API implementa un esquema CRUD completo junto con un sistema inteligente de monitoreo a través de los siguientes métodos HTTP estandarizados:
