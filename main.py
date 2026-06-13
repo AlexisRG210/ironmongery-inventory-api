@@ -7,8 +7,23 @@ from crud.ironmongery_crud import (
     delete_product_crud,
     get_low_amount
 )
+from crud.users_crud import check_user_credentials
 from fastapi import HTTPException, FastAPI #Specialized libraries
 from pydantic import BaseModel
+
+app = FastAPI()
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"],
+)
+
+# ... (El resto de tus endpoints GET, POST y tu nuevo /iron/login se quedan exactamente igual abajo)
 
 class IronSchema(BaseModel):
     nombre: str
@@ -17,7 +32,6 @@ class IronSchema(BaseModel):
     cantidad_actual: int
     stock_minimo_alerta: int
 
-app = FastAPI()
 #This is the root and links the function below
 @app.get("/")
 def inicio():
@@ -80,3 +94,18 @@ def delete_product_main(iron_id:int):
     
     result = delete_product_crud(iron_id)
     return result
+
+class LoginSchema(BaseModel):
+    username: str
+    password: str
+
+@app.post("/iron/login")
+def user_employee(credentials: LoginSchema):
+    result = check_user_credentials(credentials.username, credentials.password)
+
+    if isinstance(result, dict) and "Error" in result:
+        raise HTTPException(status_code=500, detail=result["Error"])
+    if not result:
+        raise HTTPException(status_code=401, detail="Invalid username or password.")
+    
+    return {"status": "Success", "message": "Access granted", "user": result[0]}
