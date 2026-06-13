@@ -38,7 +38,7 @@ def get_one_product(id_product:int):
         return {"Error": "Can't connected with database."}
     try:
         #Create the cursor
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
 
         #Make query and execute the query
         query = "SELECT * FROM productos WHERE id = %s"
@@ -52,7 +52,7 @@ def get_one_product(id_product:int):
 
         #Safe the list
         products = cursor.fetchall()
-        return products
+        return products[0]
     
     except Exception as Exc:
         return {"Error": "Error to consult.", "detail": str(Exc)}

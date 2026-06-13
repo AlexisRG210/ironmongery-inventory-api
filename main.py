@@ -109,3 +109,29 @@ def user_employee(credentials: LoginSchema):
         raise HTTPException(status_code=401, detail="Invalid username or password.")
     
     return {"status": "Success", "message": "Access granted", "user": result[0]}
+
+class CheckoutSchema(BaseModel):
+    product_id: int
+    quantity_sold: int
+
+@app.put("/iron/checkout")
+def process_checkout(item: CheckoutSchema):
+    if not check_iron_exists(item.product_id):
+        raise HTTPException(status_code=404, detail="Product not found.")
+    
+    current_product = get_one_product(item.product_id)
+    if not current_product or "Error" in current_product:
+        raise HTTPException(status_code=500, detail="Database retrieval error.")
+    
+    new_amount = current_product["cantidad_actual"] - item.quantity_sold
+    
+    if new_amount < 0:
+        raise HTTPException(status_code=400, detail=f"Insufficient stock for ID {item.product_id}.")
+    
+    result = update_product_crud(
+        iron_id=item.product_id,
+        iron_price_cost=current_product["precio_costo"],
+        iron_price_sale=current_product["precio_venta"],
+        iron_amount=new_amount
+    )
+    return {"status": "Success", "detail": f"Stock decreased to {new_amount}"}
